@@ -57,7 +57,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.jvm.AsmTypes.DEFAULT_CONSTRUCTOR_MARKER
 import org.jetbrains.kotlin.resolve.jvm.AsmTypes.OBJECT_TYPE
 import org.jetbrains.kotlin.resolve.jvm.JvmClassName
-import org.jetbrains.kotlin.resolve.jvm.annotations.hasJvmDefaultAnnotation
+import org.jetbrains.kotlin.resolve.jvm.annotations.isCompiledToJvmDefaultIfNoAbstract
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodGenericSignature
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodParameterKind
 import org.jetbrains.kotlin.resolve.jvm.jvmSignature.JvmMethodSignature
@@ -442,8 +442,8 @@ class KotlinTypeMapper @JvmOverloads constructor(
 
             baseMethodDescriptor = findBaseDeclaration(functionDescriptor).original
             val ownerForDefault = baseMethodDescriptor.containingDeclaration as ClassDescriptor
-            isDefaultMethodInInterface = isJvmInterface(ownerForDefault) && baseMethodDescriptor.hasJvmDefaultAnnotation(jvmDefaultMode)
-            ownerForDefaultImpl = if (isJvmInterface(ownerForDefault) && !baseMethodDescriptor.hasJvmDefaultAnnotation(jvmDefaultMode))
+            isDefaultMethodInInterface = isJvmInterface(ownerForDefault) && baseMethodDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefaultMode)
+            ownerForDefaultImpl = if (isJvmInterface(ownerForDefault) && !baseMethodDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefaultMode))
                 mapDefaultImpls(ownerForDefault)
             else
                 mapClass(ownerForDefault)
@@ -451,7 +451,7 @@ class KotlinTypeMapper @JvmOverloads constructor(
             if (isInterface && (superCall || descriptor.visibility == Visibilities.PRIVATE || isAccessor(descriptor))) {
                 thisClass = mapClass(functionParent)
                 dispatchReceiverKotlinType = functionParent.defaultType
-                if (declarationOwner is JavaClassDescriptor || declarationFunctionDescriptor.hasJvmDefaultAnnotation(jvmDefaultMode)) {
+                if (declarationOwner is JavaClassDescriptor || declarationFunctionDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefaultMode)) {
                     invokeOpcode = INVOKESPECIAL
                     signature = mapSignatureSkipGeneric(functionDescriptor)
                     returnKotlinType = functionDescriptor.returnType
@@ -462,7 +462,7 @@ class KotlinTypeMapper @JvmOverloads constructor(
                     val originalDescriptor = descriptor.original
                     signature = mapSignatureSkipGeneric(originalDescriptor, OwnerKind.DEFAULT_IMPLS)
                     returnKotlinType = getReturnValueType(originalDescriptor)
-                    if (descriptor is AccessorForCallableDescriptor<*> && descriptor.calleeDescriptor.hasJvmDefaultAnnotation(jvmDefaultMode)) {
+                    if (descriptor is AccessorForCallableDescriptor<*> && descriptor.calleeDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefaultMode)) {
                         owner = mapClass(functionParent)
                         isInterfaceMember = true
                     } else {
@@ -1519,7 +1519,7 @@ class KotlinTypeMapper @JvmOverloads constructor(
                     current = classCallable
                     continue
                 }
-                if (isSuperCall && !current.hasJvmDefaultAnnotation(jvmDefaultMode) && !isInterface(current.containingDeclaration)) {
+                if (isSuperCall && !current.isCompiledToJvmDefaultIfNoAbstract(jvmDefaultMode) && !isInterface(current.containingDeclaration)) {
                     //Don't unwrap fake overrides from class to interface cause substituted override would be implicitly generated
                     return current
                 }
