@@ -4,6 +4,7 @@
 // WITH_RUNTIME
 
 interface A {
+    @JvmDefault
     fun foo(x: String = "OK"): String {
         return x
     }
