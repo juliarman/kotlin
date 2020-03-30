@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 import org.jetbrains.kotlin.resolve.descriptorUtil.isEffectivelyPrivateApi
 import org.jetbrains.kotlin.resolve.descriptorUtil.nonSourceAnnotations
 import org.jetbrains.kotlin.resolve.jvm.annotations.hasJvmDefaultAnnotation
-import org.jetbrains.kotlin.resolve.jvm.annotations.isCompiledToJvmDefaultIfNoAbstract
 import org.jetbrains.kotlin.serialization.DescriptorSerializer
 import org.jetbrains.kotlin.serialization.DescriptorSerializer.Companion.writeVersionRequirement
 import org.jetbrains.kotlin.serialization.SerializerExtension
