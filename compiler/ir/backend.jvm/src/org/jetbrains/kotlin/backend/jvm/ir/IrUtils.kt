@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.backend.jvm.ir
 
+import org.jetbrains.kotlin.backend.common.ir.ir2string
 import org.jetbrains.kotlin.backend.common.lower.IrLoweringContext
 import org.jetbrains.kotlin.backend.jvm.JvmBackendContext
 import org.jetbrains.kotlin.backend.jvm.JvmLoweredDeclarationOrigin
@@ -147,7 +148,14 @@ fun IrDeclaration.getJvmNameFromAnnotation(): String? {
 val IrFunction.propertyIfAccessor: IrDeclaration
     get() = (this as? IrSimpleFunction)?.correspondingPropertySymbol?.owner ?: this
 
-fun IrFunction.isCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boolean {
+fun IrFunction.isSimpleFunctionCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boolean {
+    return (this as? IrSimpleFunction)?.isCompiledToJvmDefault(jvmDefaultMode) ?: false
+}
+
+fun IrSimpleFunction.isCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boolean {
+    assert(this.origin != IrDeclarationOrigin.FAKE_OVERRIDE && parentAsClass.isInterface && modality != Modality.ABSTRACT) {
+        "`isCompiledToJvmDefault` should be called on non-fakeoverrides and non-abstract methods from interfaces ${ir2string(this)}"
+    }
     if (hasJvmDefault()) return true
     val parentDescriptor = propertyIfAccessor.parentAsClass.descriptor
     if (parentDescriptor !is DeserializedClassDescriptor) return jvmDefaultMode.forAllMehtodsWithBody
