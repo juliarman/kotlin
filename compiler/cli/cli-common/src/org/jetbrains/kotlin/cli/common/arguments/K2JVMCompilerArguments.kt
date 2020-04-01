@@ -270,13 +270,23 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
 
     @Argument(
         value = "-Xjvm-default",
-        valueDescription = "{disable|enable|compatibility}",
-        description = "Allow to use '@JvmDefault' annotation for JVM default method support.\n" +
-                "-Xjvm-default=disable         Prohibit usages of @JvmDefault\n" +
-                "-Xjvm-default=enable          Allow usages of @JvmDefault; only generate the default method\n" +
-                "                              in the interface (annotating an existing method can break binary compatibility)\n" +
-                "-Xjvm-default=compatibility   Allow usages of @JvmDefault; generate a compatibility accessor\n" +
-                "                              in the 'DefaultImpls' class in addition to the interface method"
+        valueDescription = "{disable|enable|compatibility|all|all-compatibility}",
+        description = "Allow to compiler emit JVM default methods (for declaration annotated with '@JvmDefault' or not).\n" +
+                "-Xjvm-default=disable            Prohibit generation of JVM default methods and @JvmDefault annotation usage\n" +
+                "-Xjvm-default=enable             Deprecated. Allow usages of @JvmDefault; only generate the default method\n" +
+                "                                 for annotated method in the interface\n" +
+                "                                 (annotating an existing method can break binary compatibility)\n" +
+                "-Xjvm-default=compatibility      Deprecated. Allow usages of @JvmDefault; generate a compatibility accessor\n" +
+                "                                 in the 'DefaultImpls' class in addition to the default interface method\n" +
+                "-Xjvm-default=all                Emit default methods for all interface declarations with body\n" +
+                "                                 (high likely breaks binary compatibility). " +
+                "                                 Keeps semantics of @JvmDefault in case of delegation absence\n"+
+                "-Xjvm-default=all-compatibility  Generate a compatibility accessor in the 'DefaultImpls' class in addition to\n" +
+                "                                 the default interface method (keeps binary compatibility).\n" +
+                "                                 If method is inherited from interface compiled in old scheme\n" +
+                "                                 than old scheme is used for DefaultImpls (i.e. delegates to superinterface DefaultImpls).\n" +
+                "                                 Otherwise DefaultImpls is performs method invocation on corresponding interface " +
+                "                                 with JVM runtime semantics of dispatching default methdos."
     )
     var jvmDefault: String by FreezableVar(JvmDefaultMode.DEFAULT.description)
 
@@ -337,12 +347,19 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
             supportCompatqualCheckerFrameworkAnnotations
         )
         result[AnalysisFlags.ignoreDataFlowInAssert] = JVMAssertionsMode.fromString(assertionsMode) != JVMAssertionsMode.LEGACY
-        JvmDefaultMode.fromStringOrNull(jvmDefault)?.let { result[JvmAnalysisFlags.jvmDefaultMode] = it }
-            ?: collector.report(
-                CompilerMessageSeverity.ERROR,
-                "Unknown @JvmDefault mode: $jvmDefault, " +
-                        "supported modes: ${JvmDefaultMode.values().map { it.description }}"
-            )
+        JvmDefaultMode.fromStringOrNull(jvmDefault)?.let {
+            result[JvmAnalysisFlags.jvmDefaultMode] = it
+            if (it == JvmDefaultMode.ENABLE || it == JvmDefaultMode.ENABLE_WITH_DEFAULT_IMPLS) {
+                collector.report(
+                    CompilerMessageSeverity.WARNING,
+                    "'-Xjvm-default=$jvmDefault' mode is deprecated. Please considering to switch to new modes: 'all' and 'all-compatibility'"
+                )
+            }
+        } ?: collector.report(
+            CompilerMessageSeverity.ERROR,
+            "Unknown @JvmDefault mode: $jvmDefault, " +
+                    "supported modes: ${JvmDefaultMode.values().map { it.description }}"
+        )
         result[JvmAnalysisFlags.inheritMultifileParts] = inheritMultifileParts
         result[JvmAnalysisFlags.sanitizeParentheses] = sanitizeParentheses
         result[JvmAnalysisFlags.suppressMissingBuiltinsError] = suppressMissingBuiltinsError
