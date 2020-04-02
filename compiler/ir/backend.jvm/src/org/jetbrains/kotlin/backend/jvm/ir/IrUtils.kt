@@ -149,11 +149,11 @@ val IrFunction.propertyIfAccessor: IrDeclaration
     get() = (this as? IrSimpleFunction)?.correspondingPropertySymbol?.owner ?: this
 
 fun IrFunction.isSimpleFunctionCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boolean {
-    return (this as? IrSimpleFunction)?.isCompiledToJvmDefault(jvmDefaultMode) ?: false
+    return (this as? IrSimpleFunction)?.isCompiledToJvmDefault(jvmDefaultMode) == true
 }
 
 fun IrSimpleFunction.isCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boolean {
-    assert(this.origin != IrDeclarationOrigin.FAKE_OVERRIDE && parentAsClass.isInterface && modality != Modality.ABSTRACT) {
+    assert(!isFakeOverride && parentAsClass.isInterface && modality != Modality.ABSTRACT) {
         "`isCompiledToJvmDefault` should be called on non-fakeoverrides and non-abstract methods from interfaces ${ir2string(this)}"
     }
     if (hasJvmDefault()) return true
@@ -294,10 +294,13 @@ fun IrFunctionAccessExpression.copyFromWithPlaceholderTypeArguments(existingCall
 
 // Check whether a function maps to an abstract method.
 // For non-interface methods or interface methods coming from Java the modality is correct. Kotlin interface methods
-// are abstract unless they are annotated with @JvmDefault or @PlatformDependent or they override a method with
-// such an annotation.
-fun IrSimpleFunction.isJvmAbstract(jvmDefaultMode: JvmDefaultMode): Boolean = (modality == Modality.ABSTRACT) ||
-        (parentAsClass.isJvmInterface && resolveFakeOverride()?.run { !isCompiledToJvmDefault(jvmDefaultMode) && !hasPlatformDependent() } ?: true)
+// are abstract unless they are annotated @PlatformDependent or compiled to JVM default (with @JvmDefault annotation or without)
+// or they override such method.
+fun IrSimpleFunction.isJvmAbstract(jvmDefaultMode: JvmDefaultMode): Boolean {
+    if (modality == Modality.ABSTRACT) return true
+    if (!parentAsClass.isJvmInterface) return false
+    return resolveFakeOverride()?.run { !isCompiledToJvmDefault(jvmDefaultMode) && !hasPlatformDependent() } != false
+}
 
 fun firstSuperMethodFromKotlin(
     override: IrSimpleFunction,

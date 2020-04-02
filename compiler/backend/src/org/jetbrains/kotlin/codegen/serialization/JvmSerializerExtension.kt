@@ -83,15 +83,13 @@ class JvmSerializerExtension @JvmOverloads constructor(
         if (moduleName != JvmProtoBufUtil.DEFAULT_MODULE_NAME) {
             proto.setExtension(JvmProtoBuf.classModuleName, stringTable.getStringIndex(moduleName))
         }
-        //TODO: local delegated properties
+        //TODO: support local delegated properties in new defaults scheme
         val containerAsmType =
             if (DescriptorUtils.isInterface(descriptor)) typeMapper.mapDefaultImpls(descriptor) else typeMapper.mapClass(descriptor)
         writeLocalProperties(proto, containerAsmType, JvmProtoBuf.classLocalVariable)
         writeVersionRequirementForJvmDefaultIfNeeded(descriptor, proto, versionRequirementTable)
 
-        if ((jvmDefaultMode == JvmDefaultMode.ALL_INCOMPATIBLE || jvmDefaultMode == JvmDefaultMode.ALL_COMPATIBILITY) &&
-            isInterface(descriptor)
-        ) {
+        if (jvmDefaultMode.forAllMethodsWithBody && isInterface(descriptor)) {
             proto.setExtension(JvmProtoBuf.generationOptions, JvmFlags.getPropertyFlags(true))
         }
     }

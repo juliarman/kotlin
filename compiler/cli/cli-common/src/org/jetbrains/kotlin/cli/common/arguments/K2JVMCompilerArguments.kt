@@ -279,13 +279,13 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
                 "-Xjvm-default=compatibility      Deprecated. Allow usages of @JvmDefault; generate a compatibility accessor\n" +
                 "                                 in the 'DefaultImpls' class in addition to the default interface method\n" +
                 "-Xjvm-default=all                Emit default methods for all interface declarations with body\n" +
-                "                                 (high likely breaks binary compatibility). " +
+                "                                 (high likely breaks binary compatibility).\n" +
                 "                                 Keeps semantics of @JvmDefault in case of delegation absence\n"+
                 "-Xjvm-default=all-compatibility  Generate a compatibility accessor in the 'DefaultImpls' class in addition to\n" +
                 "                                 the default interface method (keeps binary compatibility).\n" +
                 "                                 If method is inherited from interface compiled in old scheme\n" +
                 "                                 than old scheme is used for DefaultImpls (i.e. delegates to superinterface DefaultImpls).\n" +
-                "                                 Otherwise DefaultImpls is performs method invocation on corresponding interface " +
+                "                                 Otherwise DefaultImpls is performs method invocation on corresponding interface\n" +
                 "                                 with JVM runtime semantics of dispatching default methdos."
     )
     var jvmDefault: String by FreezableVar(JvmDefaultMode.DEFAULT.description)
