@@ -158,7 +158,7 @@ fun IrSimpleFunction.isCompiledToJvmDefault(jvmDefaultMode: JvmDefaultMode): Boo
     }
     if (hasJvmDefault()) return true
     val parentDescriptor = propertyIfAccessor.parentAsClass.descriptor
-    if (parentDescriptor !is DeserializedClassDescriptor) return jvmDefaultMode.forAllMehtodsWithBody
+    if (parentDescriptor !is DeserializedClassDescriptor) return jvmDefaultMode.forAllMethodsWithBody
     return JvmProtoBufUtil.isNewPlaceForBodyGeneration(parentDescriptor.classProto)
 }
 

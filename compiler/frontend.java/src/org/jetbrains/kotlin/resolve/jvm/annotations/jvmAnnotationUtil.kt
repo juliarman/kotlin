@@ -57,7 +57,7 @@ fun CallableMemberDescriptor.isCompiledToJvmDefault(jvmDefault: JvmDefaultMode):
 //    }
 
     if (directMember.annotations.hasAnnotation(JVM_DEFAULT_FQ_NAME)) return true
-    if (clazz !is DeserializedClassDescriptor) return jvmDefault.forAllMehtodsWithBody
+    if (clazz !is DeserializedClassDescriptor) return jvmDefault.forAllMethodsWithBody
     return JvmProtoBufUtil.isNewPlaceForBodyGeneration(clazz.classProto)
 }
 
