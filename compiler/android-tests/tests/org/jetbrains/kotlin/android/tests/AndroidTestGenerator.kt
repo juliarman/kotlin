@@ -32,7 +32,7 @@ private val packagePattern = Pattern.compile("(?m)^\\s*package[ |\t]+([\\w|\\.]*
 private val importPattern = Pattern.compile("import[ |\t]([\\w|]*\\.)")
 
 private data class OldPackageAndNew(val oldFqName: FqName, val newFqName: FqName)
-
+var count = 0;
 internal fun patchFilesAndAddTest(
     testFile: File,
     testFiles: List<KotlinBaseTest.TestFile>,
@@ -44,7 +44,7 @@ internal fun patchFilesAndAddTest(
     }
     val ktFiles = testFiles.filter { it.name.endsWith(".kt") }
     if (ktFiles.isEmpty()) return null
-
+    if (count++ > 10) return null;
     val newPackagePrefix = testFile.path.replace("\\\\|-|\\.|/".toRegex(), "_")
     val oldPackage = Ref<FqName>()
     val isSingle = testFiles.size == 1

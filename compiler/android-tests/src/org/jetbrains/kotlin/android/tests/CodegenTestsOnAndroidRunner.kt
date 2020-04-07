@@ -141,8 +141,8 @@ class CodegenTestsOnAndroidRunner private constructor(private val pathManager: P
         }
 
         val downloader = SDKDownloader(pathManager)
-        downloader.downloadAll()
-        downloader.unzipAll()
+        downloader.downloadAndInstallPackages()
+
         PermissionManager.setPermissions(pathManager)
     }
 

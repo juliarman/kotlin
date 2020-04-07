@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.android.tests;
 
 import org.jetbrains.kotlin.android.tests.download.SDKDownloader;
+import org.jetbrains.kotlin.test.KotlinTestUtils;
 
 import java.io.File;
 
@@ -48,6 +49,14 @@ public class PathManager {
         return getAndroidSdkRoot() + "/tools";
     }
 
+    public String getCmdLineToolsFolderInAndroidSdk() {
+        return getAndroidSdkRoot() + "/cmdline-tools";
+    }
+
+    public String getCmdLineToolsBinFolder() {
+        return getAndroidSdkRoot() + "/cmdline-tools/latest/bin";
+    }
+
     public String getEmulatorFolderInAndroidSdk() {
         return getAndroidSdkRoot() + "/emulator";
     }
@@ -73,7 +82,7 @@ public class PathManager {
     }
 
     public String getAndroidSdkRoot() {
-        return getDependenciesRoot() + "/android-sdk";
+        return KotlinTestUtils.getAndroidSdkSystemIndependentPath();
     }
 
     public String getDependenciesRoot() {

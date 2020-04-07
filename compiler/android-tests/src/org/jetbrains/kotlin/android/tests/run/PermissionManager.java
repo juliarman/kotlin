@@ -29,6 +29,7 @@ public class PermissionManager {
 
     public static void setPermissions(PathManager pathManager) {
         if (!SystemInfo.isWindows) {
+            setExecPermissionForSimpleNamedFiles(new File(pathManager.getCmdLineToolsBinFolder()));
             setExecPermissionForSimpleNamedFiles(new File(pathManager.getToolsFolderInAndroidSdk()));
             setExecPermissionForSimpleNamedFiles(new File(pathManager.getBuildToolsFolderInAndroidSdk() + "/" + SDKDownloader.BUILD_TOOLS));
             setExecPermissionForSimpleNamedFiles(new File(pathManager.getPlatformToolsFolderInAndroidSdk()));

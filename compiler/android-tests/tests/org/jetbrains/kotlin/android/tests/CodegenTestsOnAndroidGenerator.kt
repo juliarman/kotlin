@@ -269,7 +269,7 @@ class CodegenTestsOnAndroidGenerator private constructor(private val pathManager
 
         @Throws(IOException::class)
         internal fun writeAndroidSkdToLocalProperties(pathManager: PathManager) {
-            val sdkRoot = File(pathManager.androidSdkRoot).invariantSeparatorsPath
+            val sdkRoot = KotlinTestUtils.getAndroidSdkSystemIndependentPath()
             println("Writing android sdk to local.properties: $sdkRoot")
             val file = File(pathManager.tmpFolder + "/local.properties")
             FileWriter(file).use { fw -> fw.write("sdk.dir=$sdkRoot") }

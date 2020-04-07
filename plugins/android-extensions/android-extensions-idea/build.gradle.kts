@@ -78,7 +78,7 @@ testsJar {}
 projectTest(parallel = true) {
     dependsOn(":dist")
     workingDir = rootDir
-    useAndroidSdk()
+    //useAndroidSdk()
     useAndroidJar()
 }
 
