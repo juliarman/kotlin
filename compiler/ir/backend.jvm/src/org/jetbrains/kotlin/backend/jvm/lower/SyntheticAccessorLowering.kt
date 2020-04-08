@@ -501,9 +501,7 @@ internal class SyntheticAccessorLowering(val context: JvmBackendContext) : IrEle
 
             // The only function accessors placed on interfaces are for private functions and JvmDefault implementations.
             // The two cannot clash.
-            parentAsClass.isJvmInterface -> if (!Visibilities.isPrivate(visibility) &&
-                resolveFakeOverride()?.isCompiledToJvmDefault(context.state.jvmDefaultMode) == true
-            ) "\$jd" else ""
+            parentAsClass.isJvmInterface -> if (!Visibilities.isPrivate(visibility)) "\$jd" else ""
 
             // Accessor for _s_uper-qualified call
             superQualifier != null -> "\$s" + superQualifier.descriptor.syntheticAccessorToSuperSuffix()
