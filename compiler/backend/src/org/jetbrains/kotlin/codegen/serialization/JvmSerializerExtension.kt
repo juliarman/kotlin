@@ -90,7 +90,7 @@ class JvmSerializerExtension @JvmOverloads constructor(
         writeVersionRequirementForJvmDefaultIfNeeded(descriptor, proto, versionRequirementTable)
 
         if (jvmDefaultMode.forAllMethodsWithBody && isInterface(descriptor)) {
-            proto.setExtension(JvmProtoBuf.jvmClassFlags, JvmFlags.getPropertyFlags(true))
+            proto.setExtension(JvmProtoBuf.jvmClassFlags, JvmFlags.getClassFlags(true))
         }
     }
 
