@@ -28,10 +28,11 @@ import kotlin.internal.RequireKotlinVersionKind
  *
  * @[JvmDefault] methods are excluded from interface delegation.
  *
- * @Deprecated
- * This annotation is deprecated in favor of new compiler arguments -Xjvm-default=all-compatibility and -Xjvm-default=all.
+ * #
+ * This annotation is **deprecated** in favor of new compiler arguments `-Xjvm-default=all-compatibility` and `-Xjvm-default=all`.
  * The new arguments allow all interface methods with bodies to be generated as JVM default methods on JVM target 1.8+.
- * Please refer to the <[JVM defaults]>(https://kotlinlang.org/docs/reference/compiler-reference.html) for more information.
+ * Please refer to the [official documentation](https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#default-methods-in-interfaces)
+ * for more information.
  *
  */
 @SinceKotlin("1.2")
