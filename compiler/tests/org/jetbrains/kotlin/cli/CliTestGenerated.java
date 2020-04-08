@@ -520,6 +520,16 @@ public class CliTestGenerated extends AbstractCliTest {
             runTest("compiler/testData/cli/jvm/languageVersionUnsupported.args");
         }
 
+        @TestMetadata("legacyAssertDisabled.args")
+        public void testLegacyAssertDisabled() throws Exception {
+            runTest("compiler/testData/cli/jvm/legacyAssertDisabled.args");
+        }
+
+        @TestMetadata("legacyAssertEnabled.args")
+        public void testLegacyAssertEnabled() throws Exception {
+            runTest("compiler/testData/cli/jvm/legacyAssertEnabled.args");
+        }
+
         @TestMetadata("legacySmartCastsAfterTry.args")
         public void testLegacySmartCastsAfterTry() throws Exception {
             runTest("compiler/testData/cli/jvm/legacySmartCastsAfterTry.args");
