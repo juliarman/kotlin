@@ -109,12 +109,7 @@ class JvmSerializerExtension @JvmOverloads constructor(
                     writeVersionRequirement(1, 2, 40, ProtoBuf.VersionRequirement.VersionKind.COMPILER_VERSION, versionRequirementTable)
                 )
             }
-            if (jvmDefaultMode == JvmDefaultMode.ALL_INCOMPATIBLE &&
-                classDescriptor.unsubstitutedMemberScope.getContributedDescriptors().any {
-                    it is FunctionDescriptor && !DescriptorUtils.isMethodOfAny(it) && it.modality != Modality.ABSTRACT
-                            || (it is PropertyDescriptor && it.modality != Modality.ABSTRACT)
-                }
-            ) {
+            if (jvmDefaultMode == JvmDefaultMode.ALL_INCOMPATIBLE) {
                 builder.addVersionRequirement(
                     writeVersionRequirement(1, 4, 0, ProtoBuf.VersionRequirement.VersionKind.COMPILER_VERSION, versionRequirementTable)
                 )

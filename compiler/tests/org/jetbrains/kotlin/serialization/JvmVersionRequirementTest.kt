@@ -82,9 +82,7 @@ class JvmVersionRequirementTest : AbstractVersionRequirementTest() {
                 "test.Base",
                 "test.Derived",
                 "test.BaseWithProperty",
-                "test.DerivedWithProperty"
-            ),
-            fqNamesWithoutRequirement = listOf(
+                "test.DerivedWithProperty",
                 "test.Empty",
                 "test.EmptyWithNested",
                 "test.WithAbstractDeclaration",
