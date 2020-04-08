@@ -93,6 +93,24 @@ class JvmVersionRequirementTest : AbstractVersionRequirementTest() {
         )
     }
 
+    fun testAllCompatibilityJvmDefault() {
+        doTest(
+            VersionRequirement.Version(1, 4, 0), DeprecationLevel.ERROR, null, COMPILER_VERSION, null,
+            analysisFlags = mapOf(JvmAnalysisFlags.jvmDefaultMode to JvmDefaultMode.ALL_COMPATIBILITY),
+            fqNamesWithRequirements = emptyList(),
+            fqNamesWithoutRequirement = listOf(
+                "test.Base",
+                "test.Derived",
+                "test.BaseWithProperty",
+                "test.DerivedWithProperty",
+                "test.Empty",
+                "test.EmptyWithNested",
+                "test.WithAbstractDeclaration",
+                "test.DerivedFromWithAbstractDeclaration"
+            )
+        )
+    }
+
     fun testJvmFieldInInterfaceCompanion() {
         doTest(
             VersionRequirement.Version(1, 2, 70), DeprecationLevel.ERROR, null, COMPILER_VERSION, null,

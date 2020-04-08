@@ -39,7 +39,7 @@ abstract class AbstractVersionRequirementTest : TestCaseWithTmpdir() {
         for (fqName in fqNamesWithRequirements) {
             val descriptor = module.findUnambiguousDescriptorByFqName(fqName)
 
-            val requirement = extractRequirenment(descriptor) ?: throw AssertionError("No VersionRequirement for $descriptor")
+            val requirement = extractRequirement(descriptor) ?: throw AssertionError("No VersionRequirement for $descriptor")
 
             assertEquals("Incorrect version for $fqName", expectedVersionRequirement, requirement.version)
             assertEquals("Incorrect level for $fqName", expectedLevel, requirement.level)
@@ -51,12 +51,12 @@ abstract class AbstractVersionRequirementTest : TestCaseWithTmpdir() {
         for (fqName in fqNamesWithoutRequirement) {
             val descriptor = module.findUnambiguousDescriptorByFqName(fqName)
 
-            val requirenment = extractRequirenment(descriptor)
+            val requirenment = extractRequirement(descriptor)
             assertNull("Expecting absence of any requirements for $fqName, but `$requirenment`", requirenment)
         }
     }
 
-    private fun extractRequirenment(descriptor: DeclarationDescriptor): VersionRequirement? {
+    private fun extractRequirement(descriptor: DeclarationDescriptor): VersionRequirement? {
         return when (descriptor) {
             is DeserializedMemberDescriptor -> descriptor.versionRequirements.singleOrNull()
             is DeserializedClassDescriptor -> descriptor.versionRequirements.singleOrNull()
