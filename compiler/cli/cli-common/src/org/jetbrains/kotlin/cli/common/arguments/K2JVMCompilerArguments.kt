@@ -270,23 +270,24 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
 
     @Argument(
         value = "-Xjvm-default",
-        valueDescription = "{disable|enable|compatibility|all|all-compatibility}",
+        valueDescription = "{all|all-compatibility|disable|enable|compatibility}",
         description = "Allow to compiler emit JVM default methods (for declaration annotated with '@JvmDefault' or not).\n" +
-                "-Xjvm-default=disable            Prohibit generation of JVM default methods and @JvmDefault annotation usage\n" +
-                "-Xjvm-default=enable             Deprecated. Allow usages of @JvmDefault; only generate the default method\n" +
-                "                                 for annotated method in the interface\n" +
-                "                                 (annotating an existing method can break binary compatibility)\n" +
-                "-Xjvm-default=compatibility      Deprecated. Allow usages of @JvmDefault; generate a compatibility accessor\n" +
-                "                                 in the 'DefaultImpls' class in addition to the default interface method\n" +
-                "-Xjvm-default=all                Emit default methods for all interface declarations with body\n" +
-                "                                 (high likely breaks binary compatibility).\n" +
+                "-Xjvm-default=all                Emit default methods for all interface declarations with body.\n" +
+                "                                 High likely breaks binary compatibility.\n" +
                 "                                 Keeps semantics of @JvmDefault in case of delegation absence\n"+
                 "-Xjvm-default=all-compatibility  Generate a compatibility accessor in the 'DefaultImpls' class in addition to\n" +
                 "                                 the default interface method (keeps binary compatibility).\n" +
                 "                                 If method is inherited from interface compiled in old scheme\n" +
                 "                                 than old scheme is used for DefaultImpls (i.e. delegates to superinterface DefaultImpls).\n" +
                 "                                 Otherwise DefaultImpls is performs method invocation on corresponding interface\n" +
-                "                                 with JVM runtime semantics of dispatching default methdos."
+                "                                 with JVM runtime semantics of dispatching default methods.\n" +
+                "-Xjvm-default=disable            Prohibit generation of JVM default methods and @JvmDefault annotation usage\n" +
+                " Next modes are DEPRECATED:\n" +
+                "-Xjvm-default=enable             Allow usages of @JvmDefault; only generate the default method\n" +
+                "                                 for annotated method in the interface\n" +
+                "                                 (annotating an existing method can break binary compatibility)\n" +
+                "-Xjvm-default=compatibility      Allow usages of @JvmDefault; generate a compatibility accessor\n" +
+                "                                 in the 'DefaultImpls' class in addition to the default interface method\n"
     )
     var jvmDefault: String by FreezableVar(JvmDefaultMode.DEFAULT.description)
 
