@@ -25238,6 +25238,11 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
                 runTest("compiler/testData/codegen/box/reflection/functions/instanceOfFunction.kt");
             }
 
+            @TestMetadata("isAccessibleOnAllMembers.kt")
+            public void testIsAccessibleOnAllMembers() throws Exception {
+                runTest("compiler/testData/codegen/box/reflection/functions/isAccessibleOnAllMembers.kt");
+            }
+
             @TestMetadata("javaClassGetFunctions.kt")
             public void testJavaClassGetFunctions() throws Exception {
                 runTest("compiler/testData/codegen/box/reflection/functions/javaClassGetFunctions.kt");
